@@ -1,0 +1,16 @@
+1eb404f5a3865f676bd3b07cef233e7b *DESCRIPTION
+ef1091780504fe7a1c204941500daa51 *NAMESPACE
+34394f0e86ab81f34a70da2d057d725b *R/01Utils.R
+11a88f6663633a96e4c6f6ff1ce50b58 *R/02Metaheur.R
+95377708fe69d2800478a94472f9061d *R/03MetaheurCompare.R
+f50512974f56604e43159ecabb61fb96 *R/04ModificationComponent.R
+4445f7276e36c74557cb11cc752302b4 *R/05AssessmentComponent.R
+ca97538f85ffb46d32018a5a13271d3b *data/examplegrid.rda
+84efad7427e8e29f681700ff6c8822a3 *man/examplegrid.Rd
+2629888ddbbbce7727f4fba020de0d0f *man/getbestheur.Rd
+5acfa0a27c7a8573ca19d0c150b9e986 *man/metaheur.Rd
+81511856ad38866dba4a2e1b77bb248f *man/metaheurcompare.Rd
+7b33498b1cbf7d7c1c7bddba0f438088 *man/plotdensity.Rd
+fcc84d97f3192f4fc38861097ffc60dd *man/plotsearchpath.Rd
+9c8075e16141762be351fa72d54b0d7b *tests/testthat.R
+596d503a49e8f97e302af32bb981aac3 *tests/testthat/test.R
