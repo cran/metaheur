@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Markus Vattulainen" />
+
+<meta name="date" content="2016-06-30" />
+
+<title>Metaheur</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Metaheur</h1>
+<h4 class="author"><em>Markus Vattulainen</em></h4>
+<h4 class="date"><em>2016-06-30</em></h4>
+
+
+
+<p>Automation of preprocessing often requires computationally costly preprocessing combinations. This package helps to find near-best combinations faster. Metaheuristics supported are taboo search, simulated annealing, reheating and late acceptance. Start conditions include randon and grid starts. End conditions include all iteration rounds completed, objective threshold reached and convergence. Metaheuristics, start and end conditions can be hybridized and hyperparameters optimized. Parallel computations are supported. The package is intended to be used with package ‘preprocomb’ and takes its ‘GridClass’ object as input.</p>
+<div id="quick-start" class="section level2">
+<h2>Quick start</h2>
+<p>Let’s start by adding contaminations to Iris-data to simulate the need for preprocessing:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+testdata &lt;-<span class="st"> </span>iris
+testdata[<span class="kw">sample</span>(<span class="dv">1</span>:<span class="dv">150</span>,<span class="dv">40</span>),<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="ot">NA</span> <span class="co"># add missing values to the third variable</span>
+testdata[,<span class="dv">4</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">150</span>, testdata[,<span class="dv">4</span>], <span class="dv">2</span>) <span class="co"># add noise to the fourth variable</span>
+testdata$Irrelevant &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">150</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># add an irrelevant feature</span></code></pre></div>
+<p>A grid of 540 preprocessing combinations and corresponding preprocessed data sets to be searched from is created with package preprocomb and its setgrid() function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(preprocomb)
+examplegrid &lt;-<span class="st"> </span>preprocomb::<span class="kw">setgrid</span>(<span class="dt">phases=</span><span class="kw">c</span>(<span class="st">&quot;imputation&quot;</span>, <span class="st">&quot;smoothing&quot;</span>, <span class="st">&quot;scaling&quot;</span>, <span class="st">&quot;outliers&quot;</span>, <span class="st">&quot;selection&quot;</span>), <span class="dt">data=</span>testdata)</code></pre></div>
+<p>The metaheuristic search is controlled by the metaheur() function. An example below does 54 iterations (10% of the search space) with 20 times validated holdout classification accuracy. Classifier is support vector machine svmRadial from kernlab package (assumed to be loaded.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(metaheur)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">examplesearch &lt;-<span class="st"> </span><span class="kw">metaheur</span>(examplegrid, <span class="dt">model=</span><span class="st">&quot;svmRadial&quot;</span>, <span class="dt">iterations =</span> <span class="dv">54</span>, <span class="dt">nholdout =</span> <span class="dv">20</span>)</code></pre></div>
+<p>Execution wall-clock time in minutes can be extracted with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwalltime</span>(examplesearch)</code></pre></div>
+<pre><code>## [1] 12</code></pre>
+<p>The resulting near-optimal solution can be extracted by getbestheur() function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getbestheur</span>(examplesearch)</code></pre></div>
+<pre><code>## [[1]]
+##        imputation smoothing  scaling outliers selection
+## 3 meanclassimpute  noaction noaction noaction  noaction
+## 
+## [[2]]
+## [1] 0.9127451</code></pre>
+<p>The logs can be extracted:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getlogs</span>(examplesearch, <span class="dv">15</span>)</code></pre></div>
+<pre><code>##  [1] &quot;Start type: random restarts.&quot;                                                          
+##  [2] &quot;Number of restarts: 1&quot;                                                                 
+##  [3] &quot;Start combination: 179&quot;                                                                
+##  [4] &quot;Iteration: 1 Current best: knnimpute lowesssmooth softmaxscale orhoutlier noaction 0.8&quot;
+##  [5] &quot;Iteration: 1 Candidate: knnimpute lowesssmooth noaction orhoutlier noaction 0.81&quot;      
+##  [6] &quot;Temperature: 0&quot;                                                                        
+##  [7] &quot;Comparison value for late acceptance: 0.8&quot;                                             
+##  [8] &quot;History delta, last five: 0.01&quot;                                                        
+##  [9] &quot;Iteration: 2 Current best: knnimpute lowesssmooth noaction orhoutlier noaction 0.81&quot;   
+## [10] &quot;Iteration: 2 Candidate: knnimpute noaction noaction orhoutlier noaction 0.86&quot;          
+## [11] &quot;Temperature: 0&quot;                                                                        
+## [12] &quot;Comparison value for late acceptance: 0.81&quot;                                            
+## [13] &quot;History delta, last five: 0.03&quot;                                                        
+## [14] &quot;Iteration: 3 Current best: knnimpute noaction noaction orhoutlier noaction 0.86&quot;       
+## [15] &quot;Iteration: 3 Candidate: naomit noaction noaction orhoutlier noaction 0.82&quot;</code></pre>
+</div>
+<div id="hyperparameter-optimization" class="section level2">
+<h2>Hyperparameter optimization</h2>
+<p>Metaheuristic search hyperparameters can be optimized with either grid or random search.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">examplehyperparam &lt;-<span class="st"> </span><span class="kw">metaheurhyper</span>(examplegrid, <span class="dt">cores=</span><span class="dv">2</span>, <span class="dt">trials=</span><span class="dv">10</span>, <span class="dt">iterations=</span><span class="dv">54</span>, <span class="dt">nholdout=</span><span class="dv">10</span>)</code></pre></div>
+<p>The resulting hyperparameter search result can be extracted by plotting the results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotsearchpath</span>(examplehyperparam)</code></pre></div>
+<p><img src="data:image/png;base64,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" alt /><!-- --></p>
+<p>The plot title shows the combination of hyperparameters that has the highest mean of the best of runs in trials. The panels show best, worst and median scenarios for the combination. In the example best hyperparameters were surprisingly explorative.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
